@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-easylink" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>cordova-plugin-easylink</name>
+    <js-module name="easyLink" src="www/cordova-plugin-easylink.js">
+        <clobbers target="easyLink" />
+    </js-module>
+    <platform name = "android">
+		<config-file target="res/xml/config.xml" parent="/*">
+            <feature name="EasyLink" >
+                <param name="android-package" value="com.thomas.easylink.EasyLink"/>
+            </feature>
+        </config-file>
+        <config-file target="AndroidManifest.xml" parent="/*">  
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />  
+        </config-file> 
+        
+
+        <source-file src="src/android/libs/easylink_only.jar" target-dir="libs"/>
+        <source-file src="src/android/com/thomas/easylink/EasyLink.java" target-dir="src/com/thomas/easylink"/>
+    </platform>
+
+    <platform name = "ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="EasyLink">
+                <param name="ios-package" value="CDVEasyLink" />
+            </feature>
+        </config-file>
+
+        <header-file src="src/ios/CDVEasyLink.h" />
+        <source-file src="src/ios/CDVEasyLink.m" />
+        <source-file src="src/ios/EasyLinkSDK" />
+
+    </platform>
+</plugin>
