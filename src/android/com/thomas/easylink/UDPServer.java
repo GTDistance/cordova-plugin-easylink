@@ -1,6 +1,7 @@
 package com.thomas.easylink;
 
 import android.util.Log;
+import com.mxchip.easylink.EasyLinkAPI;
 import org.apache.cordova.CallbackContext;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +20,7 @@ public class UDPServer implements Runnable {
 	private boolean life = true;
 
 	private CallbackContext callbackContext;
+	private EasyLinkAPI elapi;
 	public UDPServer() {
 	}
 
@@ -36,13 +38,14 @@ public class UDPServer implements Runnable {
 	public void setLife(boolean life) {
 		this.life = life;
 	}
-	public void setCallbackContext(CallbackContext callbackContext){
+	public void setCallbackContextAndEasyLink(CallbackContext callbackContext, EasyLinkAPI elapi){
 		this.callbackContext = callbackContext;
+		this.elapi =elapi;
 	}
 
 	@Override
 	public void run() {
-		DatagramSocket dSocket = null;
+		DatagramSocket dSocket ;
 		DatagramPacket dPacket = new DatagramPacket(msg, msg.length);
 		try {
 			dSocket = new DatagramSocket(PORT);
@@ -58,9 +61,9 @@ public class UDPServer implements Runnable {
 					} catch (JSONException e) {
 						e.printStackTrace();
 					}
-//					String received = new String(dPacket.getData(),dPacket.getOffset(),dPacket.getLength());
-					Log.i("msg sever received",jsonStr );
-					if (callbackContext!=null){
+					if (callbackContext!=null&&elapi!=null){
+						setLife(false);
+						elapi.stopEasyLink();
 						callbackContext.success(jsonStr);
 					}
 				} catch (IOException e) {

@@ -68,7 +68,7 @@ public class EasyLink extends CordovaPlugin{
             elapi.startEasyLink(ctx, wifiSSid,wifiPsw);
             // 开启UDP服务器
             ExecutorService exec = Executors.newCachedThreadPool();
-            server.setCallbackContext(callbackContext);
+            server.setCallbackContextAndEasyLink(callbackContext,elapi);
             server.setLife(true);
             exec.execute(server);
 //            callbackContext.success("开始配网");
