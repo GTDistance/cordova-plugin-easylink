@@ -7,6 +7,9 @@ import org.apache.cordova.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Created by Thomas.Wang on 16/11/11.
  */
@@ -14,11 +17,18 @@ public class EasyLink extends CordovaPlugin{
     private EasyLinkAPI elapi;
     private Context ctx = null;
     private EasyLinkWifiManager mWifiManager = null;
+    private UDPServer server;
+
+    @Override
+    protected void pluginInitialize() {
+        super.pluginInitialize();
+        ctx = cordova.getActivity();
+        elapi = new EasyLinkAPI(ctx);
+        server = new UDPServer();
+    }
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        ctx = cordova.getActivity();
-        elapi = new EasyLinkAPI(ctx);
 
         //获取wifiSSid
         if (action.equals("getWifiSSid")){
@@ -36,6 +46,7 @@ public class EasyLink extends CordovaPlugin{
         //停止搜索
         if(action.equals("stopSearch")){
             elapi.stopEasyLink();
+            server.setLife(false);
             callbackContext.success("停止配网");
             return  true;
         }
@@ -55,7 +66,12 @@ public class EasyLink extends CordovaPlugin{
         }
         else {
             elapi.startEasyLink(ctx, wifiSSid,wifiPsw);
-            callbackContext.success("开始配网");
+            // 开启UDP服务器
+            ExecutorService exec = Executors.newCachedThreadPool();
+            server.setCallbackContext(callbackContext);
+            server.setLife(true);
+            exec.execute(server);
+//            callbackContext.success("开始配网");
         }
 
     }
