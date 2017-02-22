@@ -12,6 +12,8 @@
 @interface CDVEasyLink : CDVPlugin
 {
     EASYLINK *m_easylink_config;
+    AsyncUdpSocket *udpSocket;
+    CDVInvokedUrlCommand *m_command;
 }
 - (void)getWifiSSid:(CDVInvokedUrlCommand*)command;
 - (void)startSearch:(CDVInvokedUrlCommand*)command;
