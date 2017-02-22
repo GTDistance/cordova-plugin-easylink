@@ -35,5 +35,12 @@
         <source-file src="src/ios/CDVEasyLink.m" />
         <source-file src="src/ios/EasyLinkSDK" />
 
+	    
+	    <framework src="AssetsLibrary.framework" />
+        <framework src="AddressBook.framework" />
+        <framework src="AudioToolbox.framework" />
+        <framework src="SystemConfiguration.framework" />
+       <framework src="MobileCoreServices.framework" />
+        <framework src="CoreGraphics.framework" />
     </platform>
 </plugin>
